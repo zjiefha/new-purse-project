@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.sohucs:sohucs-java-sdk:1.2.6-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/sohucs/sohucs-java-sdk/1.2.6-SNAPSHOT/sohucs-java-sdk-1.2.6-20150824.021531-1.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/com/sohucs/sohucs-java-sdk/1.2.6-SNAPSHOT/sohucs-java-sdk-1.2.6-20150824.021531-1-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/sohucs/sohucs-java-sdk/1.2.6-SNAPSHOT/sohucs-java-sdk-1.2.6-20150824.021531-1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.springapp.mvc.dao.OrderDao">
+    <!--*****************数据映射************************-->
+    <resultMap id="orderResult" type="Order">
+        <id property="id" column="id"/>
+        <result property="sponsorId" column="sponsor_id"/>
+        <result property="recipientId" column="recipient_id"/>
+        <result property="type" column="type"/>
+        <result property="evaluation" column="evaluation"/>
+        <result property="money" column="money"/>
+        <result property="position" column="position"/>
+    </resultMap>
+
+    <insert id="add" useGeneratedKeys="true" keyProperty="id" parameterType="Order">
+            INSERT INTO t_order(id, sponsor_id, recipient_id, type,evaluation,money,position)
+            VALUES (#{id}, #{sponsorId}, #{recipientId}, #{type},#{evaluation},#{money},#{position})
+    </insert>
+
+    <select id="find" parameterType="java.lang.Integer" resultMap="orderResult">
+        SELECT * FROM t_order WHERE id = #{id}
+    </select>
+
+    <update id="update" parameterType="Order">
+        UPDATE t_order
+        <set>
+            <if test="recipientId != null">
+                recipient_id = #{recipientId},
+            </if>
+            <if test="type != null">
+                type = #{type},
+            </if>
+            <if test="evaluation != null">
+                evaluation = #{evaluation},
+            </if>
+            <if test="money != null">
+                money = #{money},
+            </if>
+            <if test="position !=  null">
+                position = #{position}
+            </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <select id="findAll" resultMap="orderResult">
+        SELECT * FROM t_order WHERE type = #{type} AND recipient_id != 0
+    </select>
+</mapper>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.springapp.mvc.dao.UsersDao">
+    <!--*****************数据映射************************-->
+    <resultMap id="usersResult" type="Users">
+        <id property="id" column="id"/>
+        <result property="nickName" column="nickname"/>
+        <result property="mobile" column="mobile"/>
+        <result property="school" column="school"/>
+        <result property="password" column="password"/>
+        <result property="position" column="position"/>
+    </resultMap>
+
+    <insert id="add" useGeneratedKeys="true" keyProperty="id" keyColumn="id" parameterType="Users">
+            INSERT INTO users(id,nickname, school, mobile,password,position)
+            VALUES (#{id},#{nickName}, #{school}, #{mobile},#{password},#{position})
+    </insert>
+
+    <select id="find" parameterType="java.lang.Integer" resultMap="usersResult">
+        SELECT * FROM users WHERE id = #{id}
+    </select>
+
+    <select id="findByMobile" parameterType="java.lang.String" resultMap="usersResult">
+        SELECT * FROM users WHERE mobile = #{mobile}
+    </select>
+
+    <select id="existMobile" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT id FROM users WHERE mobile = #{mobile}
+    </select>
+
+    <update id="update" parameterType="Users">
+        UPDATE users
+        <set>
+            <if test="nickName != null">
+                nickname = #{nickName},
+            </if>
+            <if test="mobile != null">
+                mobile = #{mobile},
+            </if>
+            <if test="school != null">
+                school = #{school},
+            </if>
+            <if test="password != null">
+                password = #{password},
+            </if>
+            <if test="position != null">
+                position = #{position}
+            </if>
+        </set>
+        WHERE id = #{id}
+
+    </update>
+</mapper>

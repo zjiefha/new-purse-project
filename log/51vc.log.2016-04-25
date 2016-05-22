@@ -1,0 +1,2 @@
+[INFO ] 2016-04-25 21:02:36,216 org.springframework.context.support.AbstractApplicationContext.doClose(AbstractApplicationContext.java:954) - Closing WebApplicationContext for namespace 'springmvc-servlet': startup date [Sun Apr 17 21:00:34 CST 2016]; parent: Root WebApplicationContext
+[INFO ] 2016-04-25 21:02:36,255 org.springframework.context.support.AbstractApplicationContext.doClose(AbstractApplicationContext.java:954) - Closing Root WebApplicationContext: startup date [Sun Apr 17 21:00:32 CST 2016]; root of context hierarchy
