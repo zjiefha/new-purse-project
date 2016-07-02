@@ -22,6 +22,10 @@
         SELECT * FROM t_order WHERE id = #{id}
     </select>
 
+    <select id="findBySponsorId" parameterType="java.lang.Integer" resultMap="orderResult">
+        SELECT * FROM t_order WHERE sponsor_id = #{sponsorId} ORDER BY id DESC
+    </select>
+
     <update id="update" parameterType="Order">
         UPDATE t_order
         <set>
@@ -45,6 +49,8 @@
     </update>
 
     <select id="findAll" resultMap="orderResult">
-        SELECT * FROM t_order WHERE type = #{type} AND recipient_id != 0
+        SELECT * FROM t_order WHERE type = #{type}
     </select>
+
+
 </mapper>

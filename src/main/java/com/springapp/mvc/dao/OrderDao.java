@@ -14,6 +14,7 @@ public interface OrderDao {
 
     public int add(Order order);
     public Order find(@Param("id")int id);
+    public List<Order> findBySponsorId(@Param("sponsorId")int sponsorId);
     public int update(Order order);
     public List<Order> findAll(@Param("type")int type);
 

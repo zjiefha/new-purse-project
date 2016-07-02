@@ -11,10 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -93,7 +90,7 @@ public class OrderController {
     }
 
     /**
-     * 订单接收
+     * 订单取消
      *
      * @param orderId     订单id
      * @param recipientId 接收用户id
@@ -112,6 +109,28 @@ public class OrderController {
         Order order = orderService.cancelOrder(orderId);
         return MapResultUtils.getSuccessResultMap(order);
     }
+
+    /**
+     * 放弃订单
+     *
+     * @param orderId   订单id
+     * @param sponsorId 接收用户id
+     * @return
+     */
+    @RequestMapping(value = "/abandonOrder", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    Map abandonOrder(@RequestParam(value = "orderId") int orderId,
+                     @RequestParam(value = "sponsorId") int sponsorId) {
+        Users userInfoById = usersService.getUserInfoById(sponsorId);
+        if (CheckParamUtils.checkParamsNull(userInfoById))
+            return MapResultUtils.getErrorResultMap(ErrorMessage.ERROR_USER_INFO);
+        if (!orderService.isAcceptOrderByUserId(orderId, sponsorId))
+            return MapResultUtils.getErrorResultMap(ErrorMessage.ERROR_ORDER_NULL);
+        Order order = orderService.abandonOrder(orderId);
+        return MapResultUtils.getSuccessResultMap(order);
+    }
+
 
     /**
      * 订单完成
@@ -133,6 +152,27 @@ public class OrderController {
             return MapResultUtils.getErrorResultMap(ErrorMessage.ERROR_ORDER_NULL);
         Order order = orderService.finishedOrder(orderId, evaluation);
         return MapResultUtils.getSuccessResultMap(order);
+    }
+
+    @RequestMapping(value = "/getOrder", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    Map getOrderById(@RequestParam("id") int id) {
+        if (CheckParamUtils.checkParamsNull(id))
+            return MapResultUtils.getErrorResultMap(ErrorMessage.ERROR_ORDER_PARAMS);
+        Order order = orderService.getOrder(id);
+        return MapResultUtils.getSuccessResultMap(order);
+    }
+
+    @RequestMapping(value = "/getOrderByUserId", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    Map getOrderByUserId(@RequestParam("userId") int userId) {
+        Users userInfoById = usersService.getUserInfoById(userId);
+        if (CheckParamUtils.checkParamsNull(userInfoById))
+            return MapResultUtils.getErrorResultMap(ErrorMessage.ERROR_USER_INFO);
+        List<Order> orderByUserId = orderService.getOrderByUserId(userId);
+        return MapResultUtils.getSuccessResultMap(orderByUserId);
     }
 
 

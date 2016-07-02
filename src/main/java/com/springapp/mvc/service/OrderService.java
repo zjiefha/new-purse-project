@@ -1,5 +1,6 @@
 package com.springapp.mvc.service;
 
+import com.springapp.mvc.Utils.CheckParamUtils;
 import com.springapp.mvc.bean.Order;
 import com.springapp.mvc.consts.Constant;
 import com.springapp.mvc.dao.OrderDao;
@@ -19,6 +20,18 @@ public class OrderService {
 
     @Autowired
     private OrderDao orderDao;
+
+    public Order getOrder(int id) {
+        Order order = orderDao.find(id);
+        if (CheckParamUtils.checkParamsNull(order)) return null;
+        return order;
+    }
+
+    public List<Order> getOrderByUserId(int userId) {
+        List<Order> bySponsorId = orderDao.findBySponsorId(userId);
+        if (CheckParamUtils.checkParamsNull(bySponsorId)) return null;
+        return bySponsorId;
+    }
 
     /**
      * 订单发布
@@ -89,9 +102,8 @@ public class OrderService {
     }
 
 
-
     /**
-     * 取消接单
+     * 取消接收接单
      *
      * @param id 订单id
      * @return
@@ -101,6 +113,22 @@ public class OrderService {
         order.setId(id);
         order.setRecipientId(0);
         order.setType(Constant.TYPE_WAIT);
+        int update = orderDao.update(order);
+        if (update == 1) return order;
+        return null;
+    }
+
+    /**
+     * 放弃接单
+     *
+     * @param id 订单id
+     * @return
+     */
+    public Order abandonOrder(int id) {
+        Order order = new Order();
+        order.setId(id);
+        order.setRecipientId(0);
+        order.setType(Constant.TYPE_ABANDON);
         int update = orderDao.update(order);
         if (update == 1) return order;
         return null;
@@ -118,9 +146,20 @@ public class OrderService {
     /**
      * 查询订单是否被某个用户接收
      */
-    public boolean isAcceptOrderByUserId(int orderId,int recipientId) {
+    public boolean isAcceptOrderByUserId(int orderId, int recipientId) {
         Order order = orderDao.find(orderId);
-        if (order != null && order.getType() == Constant.TYPE_ACCEPT && order.getRecipientId() == recipientId) return true;
+        if (order != null && order.getType() == Constant.TYPE_ACCEPT && order.getRecipientId() == recipientId)
+            return true;
+        return false;
+    }
+
+    /**
+     * 查询订单是否被某个用户接收
+     */
+    public boolean isOrderSponsor(int orderId, int sponsorId) {
+        Order order = orderDao.find(orderId);
+        if (order != null && order.getSponsorId() == sponsorId)
+            return true;
         return false;
     }
 }

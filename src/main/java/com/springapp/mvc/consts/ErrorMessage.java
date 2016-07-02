@@ -57,6 +57,7 @@ public class ErrorMessage {
     public static final ErrorMessage ERROR_SPONSORID_NULL = new ErrorMessage(521, "用户为空");
     public static final ErrorMessage ERROR_POSITION_NULL = new ErrorMessage(522, "地址为空");
     public static final ErrorMessage ERROR_ORDER_NULL = new ErrorMessage(523, "订单不存在");
+    public static final ErrorMessage ERROR_ORDER_PARAMS = new ErrorMessage(523, "参数错误");
 
 
 }
