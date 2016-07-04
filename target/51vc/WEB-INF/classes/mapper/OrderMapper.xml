@@ -11,6 +11,7 @@
         <result property="evaluation" column="evaluation"/>
         <result property="money" column="money"/>
         <result property="position" column="position"/>
+        <result property="created" column="created"/>
     </resultMap>
 
     <insert id="add" useGeneratedKeys="true" keyProperty="id" parameterType="Order">
@@ -50,6 +51,10 @@
 
     <select id="findAll" resultMap="orderResult">
         SELECT * FROM t_order WHERE type = #{type}
+    </select>
+
+    <select id="findAllByTime" resultMap="orderResult">
+        SELECT * FROM t_order WHERE type = #{type}  AND created > #{time}
     </select>
 
 

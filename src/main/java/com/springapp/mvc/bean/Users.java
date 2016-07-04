@@ -1,5 +1,7 @@
 package com.springapp.mvc.bean;
 
+import java.util.List;
+
 /**
  * Created by zhangjiefeng on 16/3/25.
  */

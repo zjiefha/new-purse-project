@@ -1,5 +1,9 @@
 package com.springapp.mvc.bean;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.util.Date;
+
 /**
  * Created by zhangjiefeng on 16/3/25.
  */
@@ -11,6 +15,9 @@ public class Order {
     private String evaluation;
     private int money;
     private String position;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date created;
 
     public int getId() {
         return id;
@@ -68,4 +75,11 @@ public class Order {
         this.position = position;
     }
 
+    public Date getCreated() {
+        return created;
+    }
+
+    public void setCreated(Date created) {
+        this.created = created;
+    }
 }

@@ -15,4 +15,6 @@ public class Constant {
     public static final int TYPE_ACCEPT = 1;
     //订单完成
     public static final int TYPE_FINISHED = 2;
+    //订单过期
+    public static final int TYPE_OVERDUE = 3;
 }

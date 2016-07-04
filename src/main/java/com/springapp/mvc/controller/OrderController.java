@@ -7,12 +7,14 @@ import com.springapp.mvc.bean.Users;
 import com.springapp.mvc.consts.ErrorMessage;
 import com.springapp.mvc.service.OrderService;
 import com.springapp.mvc.service.UsersService;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -63,8 +65,19 @@ public class OrderController {
     @RequestMapping(value = "/getWaitOrder", method = RequestMethod.GET)
     public
     @ResponseBody
-    Map getWaitOrder() {
+    Map getWaitOrder(@RequestParam(value = "position", required = false) String position,
+                     HttpServletRequest httpServletRequest) {
+        //根据业务需求加入更新地址的需求
+        if (!StringUtils.isBlank(position)) {
+            Object userId = httpServletRequest.getAttribute("userId");
+            if (!CheckParamUtils.isLogin(userId))
+                return MapResultUtils.getErrorResultMap(ErrorMessage.ERROR_TOKEN);
+            int id = Integer.parseInt(userId.toString());
+            usersService.updateUserPosition(id, position);
+        }
+
         List<Order> waitOrder = orderService.getWaitOrder();
+
         return MapResultUtils.getSuccessResultMap(waitOrder);
     }
 

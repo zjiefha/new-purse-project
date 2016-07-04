@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -60,7 +61,9 @@ public class OrderService {
      * @return
      */
     public List<Order> getWaitOrder() {
-        List<Order> allOrder = orderDao.findAll(Constant.TYPE_WAIT);
+        //根据业务需求加入时间限制
+        Date time = new Date(new Date().getTime() - 1000 * 3600 * 2);
+        List<Order> allOrder = orderDao.findAllByTime(Constant.TYPE_WAIT, time);
         if (allOrder == null) return null;
         return allOrder;
     }

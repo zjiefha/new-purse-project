@@ -81,7 +81,7 @@ public class UsersController {
     @ResponseBody
     Map getUserInfo(HttpServletRequest httpServletRequest) {
         Object userId = httpServletRequest.getAttribute("userId");
-        if (!CheckParamUtils.isLogin(userId.toString()))
+        if (!CheckParamUtils.isLogin(userId))
             return MapResultUtils.getErrorResultMap(ErrorMessage.ERROR_TOKEN);
         int id = Integer.parseInt(userId.toString());
 
@@ -106,7 +106,7 @@ public class UsersController {
                 return MapResultUtils.getErrorResultMap(ErrorMessage.ERROR_UPDATE_MOBILE);
         }
         Object userId = httpServletRequest.getAttribute("userId");
-        if (!CheckParamUtils.isLogin(userId.toString()))
+        if (!CheckParamUtils.isLogin(userId))
             return MapResultUtils.getErrorResultMap(ErrorMessage.ERROR_TOKEN);
         int id = Integer.parseInt(userId.toString());
         if (StringUtils.isBlank(nickName) && StringUtils.isBlank(mobile) && StringUtils.isBlank(school))
@@ -124,7 +124,7 @@ public class UsersController {
                            HttpServletRequest httpServletRequest) {
 
         Object userId = httpServletRequest.getAttribute("userId");
-        if (!CheckParamUtils.isLogin(userId.toString()))
+        if (!CheckParamUtils.isLogin(userId))
             return MapResultUtils.getErrorResultMap(ErrorMessage.ERROR_TOKEN);
         int id = Integer.parseInt(userId.toString());
 
@@ -143,7 +143,7 @@ public class UsersController {
                            HttpServletRequest httpServletRequest) {
 
         Object userId = httpServletRequest.getAttribute("userId");
-        if (!CheckParamUtils.isLogin(userId.toString()))
+        if (!CheckParamUtils.isLogin(userId))
             return MapResultUtils.getErrorResultMap(ErrorMessage.ERROR_TOKEN);
         int id = Integer.parseInt(userId.toString());
 

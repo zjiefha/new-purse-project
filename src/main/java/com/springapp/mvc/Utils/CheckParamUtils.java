@@ -42,9 +42,10 @@ public class CheckParamUtils {
         return m.find();
     }
 
-    public static boolean isLogin(String userId) {
+    public static boolean isLogin(Object userId) {
+        if (checkParamsNull(userId)) return false;
         try {
-            Integer.parseInt(userId);
+            Integer.parseInt(userId.toString());
             return true;
         } catch (Exception e) {
             return false;

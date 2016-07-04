@@ -111,12 +111,13 @@ public class UsersService {
         return users.getPosition();
     }
 
-    public Users updateUserPosition(int userId, String posttion) {
+    public Users updateUserPosition(int userId, String position) {
         Users users = new Users();
         users.setId(userId);
-        users.setPosition(posttion);
+        users.setPosition(position);
         int update = usersDao.update(users);
         if (update == 1) return users;
+        logger.error("failed to update position for userId={},position={}", userId, position);
         return null;
     }
 
