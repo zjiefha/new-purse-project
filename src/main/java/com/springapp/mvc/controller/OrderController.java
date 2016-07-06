@@ -46,7 +46,8 @@ public class OrderController {
     @ResponseBody
     Map issueOrder(@RequestParam(value = "money") Integer money,
                    @RequestParam(value = "sponsorId") Integer sponsorId,
-                   @RequestParam(value = "position") String position) {
+                   @RequestParam(value = "position") String position,
+                   @RequestParam(value = "message", required = false) String message) {
         if (CheckParamUtils.checkParamsNull(money)) {
             return MapResultUtils.getErrorResultMap(ErrorMessage.ERROR_MONEY_NULL);
         }
@@ -58,7 +59,7 @@ public class OrderController {
         }
         Users userInfoById = usersService.getUserInfoById(sponsorId);
         if (userInfoById == null) return MapResultUtils.getErrorResultMap(ErrorMessage.ERROR_USER_INFO);
-        Order order = orderService.issueOrder(money, sponsorId, position);
+        Order order = orderService.issueOrder(money, sponsorId, position, message);
         return MapResultUtils.getSuccessResultMap(order);
     }
 

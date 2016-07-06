@@ -12,6 +12,7 @@ public class Order {
     private int sponsorId;
     private int recipientId;
     private int type;
+    private String message;
     private String evaluation;
     private int money;
     private String position;
@@ -49,6 +50,14 @@ public class Order {
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public String getEvaluation() {

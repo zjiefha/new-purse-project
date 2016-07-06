@@ -42,11 +42,12 @@ public class OrderService {
      * @param position   发布者位置
      * @return
      */
-    public Order issueOrder(int money, int sponsor_id, String position) {
+    public Order issueOrder(int money, int sponsor_id, String position, String message) {
         Order order = new Order();
         order.setSponsorId(sponsor_id);
         order.setMoney(money);
         order.setType(Constant.TYPE_WAIT);
+        order.setMessage(message);
         order.setPosition(position);
         int add = orderDao.add(order);
         if (add == 1) {

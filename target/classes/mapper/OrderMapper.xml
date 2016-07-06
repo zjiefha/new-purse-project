@@ -9,14 +9,15 @@
         <result property="recipientId" column="recipient_id"/>
         <result property="type" column="type"/>
         <result property="evaluation" column="evaluation"/>
+        <result property="message" column="message"/>
         <result property="money" column="money"/>
         <result property="position" column="position"/>
         <result property="created" column="created"/>
     </resultMap>
 
     <insert id="add" useGeneratedKeys="true" keyProperty="id" parameterType="Order">
-            INSERT INTO t_order(id, sponsor_id, recipient_id, type,evaluation,money,position)
-            VALUES (#{id}, #{sponsorId}, #{recipientId}, #{type},#{evaluation},#{money},#{position})
+            INSERT INTO t_order(id, sponsor_id, recipient_id, type,message,evaluation,money,position)
+            VALUES (#{id}, #{sponsorId}, #{recipientId}, #{type},#{message},#{evaluation},#{money},#{position})
     </insert>
 
     <select id="find" parameterType="java.lang.Integer" resultMap="orderResult">
