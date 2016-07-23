@@ -16,6 +16,7 @@ public class Order {
     private String evaluation;
     private int money;
     private String position;
+    private int tip;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date created;
@@ -90,5 +91,13 @@ public class Order {
 
     public void setCreated(Date created) {
         this.created = created;
+    }
+
+    public int getTip() {
+        return tip;
+    }
+
+    public void setTip(int tip) {
+        this.tip = tip;
     }
 }
