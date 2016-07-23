@@ -1,12 +1,14 @@
 package com.springapp.mvc.service;
 
-import com.sohucs.services.identitymanagement.model.User;
+import com.springapp.mvc.bean.Order;
 import com.springapp.mvc.bean.Users;
 import com.springapp.mvc.dao.UsersDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * Created by zhangjiefeng on 16/3/26.
@@ -128,6 +130,21 @@ public class UsersService {
         int update = usersDao.update(users);
         if (update == 1) return users;
         return null;
+    }
+
+    public void fillUserInfoByOrder(Order order) {
+        if (order.getSponsorId() != 0) {
+            order.setSponsor(getUserInfoById(order.getSponsorId()));
+        }
+        if (order.getRecipientId() != 0) {
+            order.setRecipient(getUserInfoById(order.getRecipientId()));
+        }
+    }
+
+    public void fillUserInfoByOrder(List<Order> orders) {
+        for (Order order : orders) {
+            fillUserInfoByOrder(order);
+        }
     }
 
 }

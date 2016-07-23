@@ -10,7 +10,9 @@ import java.util.Date;
 public class Order {
     private int id;
     private int sponsorId;
+    private Users sponsor;
     private int recipientId;
+    private Users recipient;
     private int type;
     private String message;
     private String evaluation;
@@ -99,5 +101,21 @@ public class Order {
 
     public void setTip(int tip) {
         this.tip = tip;
+    }
+
+    public Users getSponsor() {
+        return sponsor;
+    }
+
+    public void setSponsor(Users sponsor) {
+        this.sponsor = sponsor;
+    }
+
+    public Users getRecipient() {
+        return recipient;
+    }
+
+    public void setRecipient(Users recipient) {
+        this.recipient = recipient;
     }
 }

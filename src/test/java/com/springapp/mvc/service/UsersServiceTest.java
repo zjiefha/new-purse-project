@@ -23,4 +23,11 @@ public class UsersServiceTest {
         System.out.println(users);
         System.out.println(users.getId());
     }
+
+    @Test
+    public void testFind() {
+        Integer i = null;
+        Users users = usersService.getUserInfoById(i);
+        System.out.println(users);
+    }
 }

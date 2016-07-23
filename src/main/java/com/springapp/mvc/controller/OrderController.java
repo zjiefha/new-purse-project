@@ -47,8 +47,8 @@ public class OrderController {
     Map issueOrder(@RequestParam(value = "money") Integer money,
                    @RequestParam(value = "sponsorId") Integer sponsorId,
                    @RequestParam(value = "position") String position,
-                   @RequestParam(value = "message", required = false) String message ,
-                   @RequestParam(value = "tip",required = false)Integer tip) {
+                   @RequestParam(value = "message", required = false) String message,
+                   @RequestParam(value = "tip", required = false) Integer tip) {
         if (CheckParamUtils.checkParamsNull(money)) {
             return MapResultUtils.getErrorResultMap(ErrorMessage.ERROR_MONEY_NULL);
         }
@@ -58,10 +58,10 @@ public class OrderController {
         if (CheckParamUtils.checkParamsNull(position)) {
             return MapResultUtils.getErrorResultMap(ErrorMessage.ERROR_POSITION_NULL);
         }
-        tip = tip == null?0:tip;
+        tip = tip == null ? 0 : tip;
         Users userInfoById = usersService.getUserInfoById(sponsorId);
         if (userInfoById == null) return MapResultUtils.getErrorResultMap(ErrorMessage.ERROR_USER_INFO);
-        Order order = orderService.issueOrder(money, sponsorId, position, message,tip);
+        Order order = orderService.issueOrder(money, sponsorId, position, message, tip);
         return MapResultUtils.getSuccessResultMap(order);
     }
 
@@ -80,7 +80,7 @@ public class OrderController {
         }
 
         List<Order> waitOrder = orderService.getWaitOrder();
-
+        usersService.fillUserInfoByOrder(waitOrder);
         return MapResultUtils.getSuccessResultMap(waitOrder);
     }
 
@@ -102,6 +102,7 @@ public class OrderController {
         if (!orderService.isAcceptOrder(orderId))
             return MapResultUtils.getErrorResultMap(ErrorMessage.ERROR_ORDER_NULL);
         Order order = orderService.acceptOrder(orderId, recipientId);
+        usersService.fillUserInfoByOrder(order);
         return MapResultUtils.getSuccessResultMap(order);
     }
 
@@ -177,6 +178,7 @@ public class OrderController {
         if (CheckParamUtils.checkParamsNull(id))
             return MapResultUtils.getErrorResultMap(ErrorMessage.ERROR_ORDER_PARAMS);
         Order order = orderService.getOrder(id);
+        usersService.fillUserInfoByOrder(order);
         return MapResultUtils.getSuccessResultMap(order);
     }
 
@@ -188,6 +190,7 @@ public class OrderController {
         if (CheckParamUtils.checkParamsNull(userInfoById))
             return MapResultUtils.getErrorResultMap(ErrorMessage.ERROR_USER_INFO);
         List<Order> orderByUserId = orderService.getOrderByUserId(userId);
+        usersService.fillUserInfoByOrder(orderByUserId);
         return MapResultUtils.getSuccessResultMap(orderByUserId);
     }
 
