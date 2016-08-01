@@ -59,5 +59,10 @@ public class ErrorMessage {
     public static final ErrorMessage ERROR_ORDER_NULL = new ErrorMessage(523, "订单不存在");
     public static final ErrorMessage ERROR_ORDER_PARAMS = new ErrorMessage(523, "参数错误");
 
+    public static final ErrorMessage ERROR_ORDER_CONT_ABANDON = new ErrorMessage(530, "订单不能放弃");
+    public static final ErrorMessage ERROR_ORDER_CONT_COMMENT = new ErrorMessage(531, "订单不是完成状态或者不是发表者");
+    public static final ErrorMessage ERROR_COMMENT = new ErrorMessage(532, "评论失败");
+    public static final ErrorMessage ERROR_FINISHED = new ErrorMessage(533, "完成失败");
+
 
 }

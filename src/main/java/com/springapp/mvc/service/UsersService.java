@@ -1,5 +1,6 @@
 package com.springapp.mvc.service;
 
+import com.springapp.mvc.Utils.CheckParamUtils;
 import com.springapp.mvc.bean.Order;
 import com.springapp.mvc.bean.Users;
 import com.springapp.mvc.dao.UsersDao;
@@ -92,6 +93,7 @@ public class UsersService {
      */
     public Users getUserInfoById(int id) {
         Users users = usersDao.find(id);
+        users.setPassword("");
         if (users == null) return null;
         return users;
     }
@@ -133,6 +135,7 @@ public class UsersService {
     }
 
     public void fillUserInfoByOrder(Order order) {
+        if (CheckParamUtils.checkParamsNull(order)) return;
         if (order.getSponsorId() != 0) {
             order.setSponsor(getUserInfoById(order.getSponsorId()));
         }
@@ -142,6 +145,7 @@ public class UsersService {
     }
 
     public void fillUserInfoByOrder(List<Order> orders) {
+        if (CheckParamUtils.checkParamsNull(orders)) return;
         for (Order order : orders) {
             fillUserInfoByOrder(order);
         }

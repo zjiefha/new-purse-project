@@ -7,7 +7,7 @@ public class Constant {
     /**
      * 订单状态
      */
-    //等待处理
+    //订单放弃
     public static final int TYPE_ABANDON = -1;
     //等待处理
     public static final int TYPE_WAIT = 0;
@@ -17,4 +17,13 @@ public class Constant {
     public static final int TYPE_FINISHED = 2;
     //订单过期
     public static final int TYPE_OVERDUE = 3;
+
+    /**
+     * 用户类型
+     */
+    public static final int USER_ALL = 0;
+    public static final int USER_SPONSOR = 1;
+    public static final int USER_RECIPIENT = 2;
+
+
 }

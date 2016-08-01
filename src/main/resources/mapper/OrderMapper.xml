@@ -29,6 +29,10 @@
         SELECT * FROM t_order WHERE sponsor_id = #{sponsorId} ORDER BY id DESC
     </select>
 
+    <select id="findByRecipientId" parameterType="java.lang.Integer" resultMap="orderResult">
+        SELECT * FROM t_order WHERE recipient_id = #{recipientId} ORDER BY id DESC
+    </select>
+
     <update id="update" parameterType="Order">
         UPDATE t_order
         <set>

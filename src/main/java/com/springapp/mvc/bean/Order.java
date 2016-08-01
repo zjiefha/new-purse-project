@@ -1,5 +1,6 @@
 package com.springapp.mvc.bean;
 
+import com.springapp.mvc.consts.Constant;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
@@ -108,6 +109,7 @@ public class Order {
     }
 
     public void setSponsor(Users sponsor) {
+        sponsor.setPassword("");
         this.sponsor = sponsor;
     }
 
@@ -116,6 +118,7 @@ public class Order {
     }
 
     public void setRecipient(Users recipient) {
+        recipient.setPassword("");
         this.recipient = recipient;
     }
 }

@@ -1,9 +1,11 @@
 package com.springapp.mvc.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.springapp.mvc.Utils.CheckParamUtils;
 import com.springapp.mvc.Utils.MapResultUtils;
 import com.springapp.mvc.bean.Order;
 import com.springapp.mvc.bean.Users;
+import com.springapp.mvc.consts.Constant;
 import com.springapp.mvc.consts.ErrorMessage;
 import com.springapp.mvc.service.OrderService;
 import com.springapp.mvc.service.UsersService;
@@ -142,32 +144,73 @@ public class OrderController {
         Users userInfoById = usersService.getUserInfoById(sponsorId);
         if (CheckParamUtils.checkParamsNull(userInfoById))
             return MapResultUtils.getErrorResultMap(ErrorMessage.ERROR_USER_INFO);
-        if (!orderService.isAcceptOrderByUserId(orderId, sponsorId))
+        Order order1 = orderService.getOrder(orderId);
+        if (CheckParamUtils.checkParamsNull(order1))
             return MapResultUtils.getErrorResultMap(ErrorMessage.ERROR_ORDER_NULL);
+
+        if (order1.getSponsorId() != sponsorId) return MapResultUtils.getErrorResultMap(ErrorMessage.ERROR_ORDER_NULL);
+        if (order1.getType() != Constant.TYPE_WAIT && order1.getType() != Constant.TYPE_ACCEPT)
+            return MapResultUtils.getErrorResultMap(ErrorMessage.ERROR_ORDER_CONT_ABANDON);
+
         Order order = orderService.abandonOrder(orderId);
         return MapResultUtils.getSuccessResultMap(order);
     }
 
 
     /**
+     * 订单评论
+     *
+     * @param orderId   订单id
+     * @param sponsorId 接收用户id
+     * @return
+     */
+    @RequestMapping(value = "/commentOrder", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    Map commentOrder(@RequestParam(value = "orderId") int orderId,
+                     @RequestParam(value = "sponsorId") int sponsorId,
+                     @RequestParam(value = "evaluation") String evaluation) {
+        Users userInfoById = usersService.getUserInfoById(sponsorId);
+        if (CheckParamUtils.checkParamsNull(userInfoById))
+            return MapResultUtils.getErrorResultMap(ErrorMessage.ERROR_USER_INFO);
+
+        Order order1 = orderService.getOrder(orderId);
+        if (CheckParamUtils.checkParamsNull(order1))
+            return MapResultUtils.getErrorResultMap(ErrorMessage.ERROR_ORDER_NULL);
+        if (order1.getType() != Constant.TYPE_FINISHED || order1.getSponsorId() != sponsorId)
+            return MapResultUtils.getErrorResultMap(ErrorMessage.ERROR_ORDER_CONT_COMMENT);
+
+        Order order = orderService.commentOrder(orderId, evaluation);
+        if (CheckParamUtils.checkParamsNull(order))
+            return MapResultUtils.getErrorResultMap(ErrorMessage.ERROR_COMMENT);
+        return MapResultUtils.getSuccessResultMap(order);
+    }
+
+    /**
      * 订单完成
      *
-     * @param orderId     订单id
-     * @param recipientId 接收用户id
+     * @param orderId   订单id
+     * @param sponsorId 发布者用户id
      * @return
      */
     @RequestMapping(value = "/finishedOrder", method = RequestMethod.POST)
     public
     @ResponseBody
     Map finishedOrder(@RequestParam(value = "orderId") int orderId,
-                      @RequestParam(value = "recipientId") int recipientId,
-                      @RequestParam(value = "evaluation", required = false) String evaluation) {
-        Users userInfoById = usersService.getUserInfoById(recipientId);
+                      @RequestParam(value = "sponsorId") int sponsorId) {
+        Users userInfoById = usersService.getUserInfoById(sponsorId);
         if (CheckParamUtils.checkParamsNull(userInfoById))
             return MapResultUtils.getErrorResultMap(ErrorMessage.ERROR_USER_INFO);
-        if (!orderService.isAcceptOrderByUserId(orderId, recipientId))
+
+        Order order1 = orderService.getOrder(orderId);
+        if (CheckParamUtils.checkParamsNull(order1))
             return MapResultUtils.getErrorResultMap(ErrorMessage.ERROR_ORDER_NULL);
-        Order order = orderService.finishedOrder(orderId, evaluation);
+        if (order1.getType() != Constant.TYPE_FINISHED || order1.getSponsorId() != sponsorId)
+            return MapResultUtils.getErrorResultMap(ErrorMessage.ERROR_ORDER_CONT_COMMENT);
+
+        Order order = orderService.finishedOrder(orderId);
+        if (CheckParamUtils.checkParamsNull(order))
+            return MapResultUtils.getErrorResultMap(ErrorMessage.ERROR_FINISHED);
         return MapResultUtils.getSuccessResultMap(order);
     }
 
@@ -185,13 +228,32 @@ public class OrderController {
     @RequestMapping(value = "/getOrderByUserId", method = RequestMethod.GET)
     public
     @ResponseBody
-    Map getOrderByUserId(@RequestParam("userId") int userId) {
+    Map getOrderByUserId(HttpServletRequest httpServletRequest,
+                         @RequestParam(value = "userType", required = false) Integer userType) {
+        userType = (userType == null || userType < 0 || userType > 2) ? Constant.USER_SPONSOR : userType;
+
+        Object id = httpServletRequest.getAttribute("userId");
+        if (!CheckParamUtils.isLogin(id))
+            return MapResultUtils.getErrorResultMap(ErrorMessage.ERROR_TOKEN);
+        int userId = Integer.parseInt(id.toString());
+
         Users userInfoById = usersService.getUserInfoById(userId);
-        if (CheckParamUtils.checkParamsNull(userInfoById))
+
+        JSONObject jsonObject = new JSONObject();
+        if (CheckParamUtils.checkParamsNull(userInfoById)) {
             return MapResultUtils.getErrorResultMap(ErrorMessage.ERROR_USER_INFO);
-        List<Order> orderByUserId = orderService.getOrderByUserId(userId);
-        usersService.fillUserInfoByOrder(orderByUserId);
-        return MapResultUtils.getSuccessResultMap(orderByUserId);
+        }
+        if (userType == 1 || userType == 0) {
+            List<Order> orderByUserId = orderService.getOrderBySponsorId(userId);
+            usersService.fillUserInfoByOrder(orderByUserId);
+            jsonObject.put("sponsorOrder", orderByUserId);
+        }
+        if (userType == 2 || userType == 0) {
+            List<Order> orderByRecipientId = orderService.getOrderByRecipientId(userId);
+            usersService.fillUserInfoByOrder(orderByRecipientId);
+            jsonObject.put("recipientOrder", orderByRecipientId);
+        }
+        return MapResultUtils.getSuccessResultMap(jsonObject);
     }
 
 

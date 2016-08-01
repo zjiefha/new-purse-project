@@ -28,8 +28,14 @@ public class OrderService {
         return order;
     }
 
-    public List<Order> getOrderByUserId(int userId) {
+    public List<Order> getOrderBySponsorId(int userId) {
         List<Order> bySponsorId = orderDao.findBySponsorId(userId);
+        if (CheckParamUtils.checkParamsNull(bySponsorId)) return null;
+        return bySponsorId;
+    }
+
+    public List<Order> getOrderByRecipientId(int userId) {
+        List<Order> bySponsorId = orderDao.findByRecipientId(userId);
         if (CheckParamUtils.checkParamsNull(bySponsorId)) return null;
         return bySponsorId;
     }
@@ -42,7 +48,7 @@ public class OrderService {
      * @param position   发布者位置
      * @return
      */
-    public Order issueOrder(int money, int sponsor_id, String position, String message,int tip) {
+    public Order issueOrder(int money, int sponsor_id, String position, String message, int tip) {
         Order order = new Order();
         order.setSponsorId(sponsor_id);
         order.setMoney(money);
@@ -90,17 +96,31 @@ public class OrderService {
     /**
      * 完成订单
      *
+     * @param id 订单id
+     * @return
+     */
+    public Order finishedOrder(int id) {
+        Order order = new Order();
+        order.setId(id);
+        order.setType(Constant.TYPE_FINISHED);
+        int update = orderDao.update(order);
+        if (update == 1) return order;
+        return null;
+    }
+
+    /**
+     * 评价订单
+     *
      * @param id         订单id
      * @param evaluation 订单评价
      * @return
      */
-    public Order finishedOrder(int id, String evaluation) {
+    public Order commentOrder(int id, String evaluation) {
+        if (CheckParamUtils.checkParamsNull(evaluation))
+            return null;
         Order order = new Order();
         order.setId(id);
-        order.setType(Constant.TYPE_FINISHED);
-        if (evaluation != null) {
-            order.setEvaluation(evaluation);
-        }
+        order.setEvaluation(evaluation);
         int update = orderDao.update(order);
         if (update == 1) return order;
         return null;
@@ -159,7 +179,7 @@ public class OrderService {
     }
 
     /**
-     * 查询订单是否被某个用户接收
+     * 查询订单是否被某个用户发布
      */
     public boolean isOrderSponsor(int orderId, int sponsorId) {
         Order order = orderDao.find(orderId);
