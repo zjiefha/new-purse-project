@@ -25,12 +25,12 @@
         SELECT * FROM t_order WHERE id = #{id}
     </select>
 
-    <select id="findBySponsorId" parameterType="java.lang.Integer" resultMap="orderResult">
-        SELECT * FROM t_order WHERE sponsor_id = #{sponsorId} ORDER BY id DESC
+    <select id="findBySponsorId"  resultMap="orderResult">
+        SELECT * FROM t_order WHERE sponsor_id = #{sponsorId} ORDER BY id DESC limit #{start},#{pageSize}
     </select>
 
-    <select id="findByRecipientId" parameterType="java.lang.Integer" resultMap="orderResult">
-        SELECT * FROM t_order WHERE recipient_id = #{recipientId} ORDER BY id DESC
+    <select id="findByRecipientId"  resultMap="orderResult">
+        SELECT * FROM t_order WHERE recipient_id = #{recipientId} ORDER BY id DESC limit #{start},#{pageSize}
     </select>
 
     <update id="update" parameterType="Order">
