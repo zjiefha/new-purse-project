@@ -4,6 +4,7 @@ import com.springapp.mvc.Utils.CheckParamUtils;
 import com.springapp.mvc.bean.Order;
 import com.springapp.mvc.consts.Constant;
 import com.springapp.mvc.dao.OrderDao;
+import org.apache.commons.collections.map.LRUMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by zhangjiefeng on 16/3/26.
@@ -18,24 +20,28 @@ import java.util.List;
 @Service
 public class OrderService {
     private static final Logger logger = LoggerFactory.getLogger(OrderService.class);
+    public static final Map<Integer, Order> orderMap = new LRUMap(40);
 
     @Autowired
     private OrderDao orderDao;
 
     public Order getOrder(int id) {
+        if (orderMap.containsKey(id))
+            return orderMap.get(id);
         Order order = orderDao.find(id);
         if (CheckParamUtils.checkParamsNull(order)) return null;
+        orderMap.put(id, order);
         return order;
     }
 
     public List<Order> getOrderBySponsorId(int userId, int start, int pageSize) {
-        List<Order> bySponsorId = orderDao.findBySponsorId(userId,start,pageSize);
+        List<Order> bySponsorId = orderDao.findBySponsorId(userId, start, pageSize);
         if (CheckParamUtils.checkParamsNull(bySponsorId)) return null;
         return bySponsorId;
     }
 
     public List<Order> getOrderByRecipientId(int userId, int start, int pageSize) {
-        List<Order> bySponsorId = orderDao.findByRecipientId(userId,start,pageSize);
+        List<Order> bySponsorId = orderDao.findByRecipientId(userId, start, pageSize);
         if (CheckParamUtils.checkParamsNull(bySponsorId)) return null;
         return bySponsorId;
     }
@@ -58,6 +64,8 @@ public class OrderService {
         order.setTip(tip);
         int add = orderDao.add(order);
         if (add == 1) {
+            if (order.getId() != 0)
+                orderMap.put(order.getId(), order);
             return order;
         }
         return null;
@@ -89,7 +97,11 @@ public class OrderService {
         order.setRecipientId(recipientId);
         order.setType(Constant.TYPE_ACCEPT);
         int update = orderDao.update(order);
-        if (update == 1) return order;
+        if (update == 1) {
+            if (orderMap.containsKey(id))
+                orderMap.remove(id);
+            return order;
+        }
         return null;
     }
 
@@ -104,7 +116,11 @@ public class OrderService {
         order.setId(id);
         order.setType(Constant.TYPE_FINISHED);
         int update = orderDao.update(order);
-        if (update == 1) return order;
+        if (update == 1) {
+            if (orderMap.containsKey(id))
+                orderMap.remove(id);
+            return order;
+        }
         return null;
     }
 
@@ -122,7 +138,11 @@ public class OrderService {
         order.setId(id);
         order.setEvaluation(evaluation);
         int update = orderDao.update(order);
-        if (update == 1) return order;
+        if (update == 1) {
+            if (orderMap.containsKey(id))
+                orderMap.remove(id);
+            return order;
+        }
         return null;
     }
 
@@ -139,7 +159,11 @@ public class OrderService {
         order.setRecipientId(0);
         order.setType(Constant.TYPE_WAIT);
         int update = orderDao.update(order);
-        if (update == 1) return order;
+        if (update == 1) {
+            if (orderMap.containsKey(id))
+                orderMap.remove(id);
+            return order;
+        }
         return null;
     }
 
@@ -155,7 +179,11 @@ public class OrderService {
         order.setRecipientId(0);
         order.setType(Constant.TYPE_ABANDON);
         int update = orderDao.update(order);
-        if (update == 1) return order;
+        if (update == 1) {
+            if (orderMap.containsKey(id))
+                orderMap.remove(id);
+            return order;
+        }
         return null;
     }
 
@@ -163,7 +191,13 @@ public class OrderService {
      * 查询订单是否可以接收
      */
     public boolean isAcceptOrder(int orderId) {
-        Order order = orderDao.find(orderId);
+        Order order;
+        if (orderMap.containsKey(orderId))
+            order = orderMap.get(orderId);
+        else {
+            order = orderDao.find(orderId);
+            orderMap.put(orderId, order);
+        }
         if (order != null && order.getType() == Constant.TYPE_WAIT) return true;
         return false;
     }
@@ -172,7 +206,13 @@ public class OrderService {
      * 查询订单是否被某个用户接收
      */
     public boolean isAcceptOrderByUserId(int orderId, int recipientId) {
-        Order order = orderDao.find(orderId);
+        Order order;
+        if (orderMap.containsKey(orderId))
+            order = orderMap.get(orderId);
+        else {
+            order = orderDao.find(orderId);
+            orderMap.put(orderId, order);
+        }
         if (order != null && order.getType() == Constant.TYPE_ACCEPT && order.getRecipientId() == recipientId)
             return true;
         return false;
@@ -182,7 +222,13 @@ public class OrderService {
      * 查询订单是否被某个用户发布
      */
     public boolean isOrderSponsor(int orderId, int sponsorId) {
-        Order order = orderDao.find(orderId);
+        Order order;
+        if (orderMap.containsKey(orderId))
+            order = orderMap.get(orderId);
+        else {
+            order = orderDao.find(orderId);
+            orderMap.put(orderId, order);
+        }
         if (order != null && order.getSponsorId() == sponsorId)
             return true;
         return false;

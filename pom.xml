@@ -59,33 +59,8 @@
         <mybatis-spring.version>1.2.2</mybatis-spring.version>
         <mysql.version>5.1.16</mysql.version>
 
-        <sohucs.version>1.2.6-SNAPSHOT</sohucs.version>
         <idcenter.version>1.1</idcenter.version>
     </properties>
-
-    <repositories>
-        <repository>
-            <id>Auto-Nexus</id>
-            <name>Auto Maven Repository</name>
-            <url>http://10.10.127.60:8081/nexus/content/groups/public/</url>
-            <releases>
-                <enabled>true</enabled>
-                <updatePolicy>always</updatePolicy>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>always</updatePolicy>
-            </snapshots>
-        </repository>
-    </repositories>
-
-    <pluginRepositories>
-        <pluginRepository>
-            <id>Auto-Nexus</id>
-            <name>Auto Maven Repository</name>
-            <url>http://10.10.127.60:8081/nexus/content/groups/public/</url>
-        </pluginRepository>
-    </pluginRepositories>
 
     <dependencies>
         <!-- spring核心依赖包 -->
@@ -173,15 +148,6 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
             <version>${slf4j.version}</version>
-        </dependency>
-
-        <!-- cache -->
-        <dependency>
-            <groupId>redis.clients</groupId>
-            <artifactId>jedis</artifactId>
-            <version>${jedis.version}</version>
-            <type>jar</type>
-            <scope>compile</scope>
         </dependency>
 
         <!-- json -->
@@ -330,32 +296,6 @@
             <artifactId>jjwt</artifactId>
             <version>0.6.0</version>
         </dependency>
-        <!-- message -->
-        <!--<dependency>
-            <groupId>org.springframework.integration</groupId>
-            <artifactId>spring-integration-kafka</artifactId>
-            <version>${spring.integration.kafka.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.integration</groupId>
-            <artifactId>spring-integration-java-dsl</artifactId>
-            <version>${spring-integration-java-dsl.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.kafka</groupId>
-            <artifactId>kafka_2.10</artifactId>
-            <version>${kafka_2.10.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-integration</artifactId>
-            <version>${spring-boot-starter.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
-            <version>${spring-boot-starter.version}</version>
-        </dependency>-->
 
         <!-- test -->
         <dependency>
@@ -364,12 +304,8 @@
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
-        <!--<dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-test</artifactId>
-            <version>${spring.version}</version>
-            <scope>test</scope>
-        </dependency>-->
+
+
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-all</artifactId>
@@ -390,34 +326,6 @@
             <version>${mysql.version}</version>
         </dependency>
 
-        <!-- sohucs -->
-        <dependency>
-            <groupId>com.sohucs</groupId>
-            <artifactId>sohucs-java-sdk</artifactId>
-            <version>${sohucs.version}</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>httpcore</artifactId>
-                    <groupId>org.apache.httpcomponents</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>httpclient</artifactId>
-                    <groupId>org.apache.httpcomponents</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <!-- sohu idcenter -->
-        <dependency>
-            <groupId>com.sohu</groupId>
-            <artifactId>idcenter</artifactId>
-            <version>${idcenter.version}</version>
-        </dependency>
-        <!-- sohu DMS -->
-        <dependency>
-            <groupId>DMS_SDK</groupId>
-            <artifactId>DMS_SDK</artifactId>
-            <version>0.1.1</version>
-        </dependency>
 
         <!--中文转拼音-->
         <dependency>
@@ -432,12 +340,6 @@
             <version>2.3.9</version>
         </dependency>
 
-        <!--网页解析-->
-        <dependency>
-            <groupId>org.jsoup</groupId>
-            <artifactId>jsoup</artifactId>
-            <version>1.8.3</version>
-        </dependency>
     </dependencies>
 
 

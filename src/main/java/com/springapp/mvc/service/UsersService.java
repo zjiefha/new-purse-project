@@ -4,12 +4,14 @@ import com.springapp.mvc.Utils.CheckParamUtils;
 import com.springapp.mvc.bean.Order;
 import com.springapp.mvc.bean.Users;
 import com.springapp.mvc.dao.UsersDao;
+import org.apache.commons.collections.map.LRUMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by zhangjiefeng on 16/3/26.
@@ -18,6 +20,7 @@ import java.util.List;
 public class UsersService {
 
     private static final Logger logger = LoggerFactory.getLogger(UsersService.class);
+    public static final Map<Integer, Users> userMap = new LRUMap(40);
 
     @Autowired
     private UsersDao usersDao;
@@ -69,7 +72,11 @@ public class UsersService {
         users.setNickName(nickname);
         users.setSchool(school);
         int update = usersDao.update(users);
-        if (update == 1) return users;
+        if (update == 1) {
+            if (userMap.containsKey(userId))
+                userMap.remove(userId);
+            return users;
+        }
         return null;
     }
 
@@ -92,9 +99,12 @@ public class UsersService {
      * @return
      */
     public Users getUserInfoById(int id) {
+        if (userMap.containsKey(id))
+            return userMap.get(id);
         Users users = usersDao.find(id);
         users.setPassword("");
         if (users == null) return null;
+        userMap.put(id, users);
         return users;
     }
 
@@ -111,6 +121,8 @@ public class UsersService {
     }
 
     public String getUserPosition(int userId) {
+        if (userMap.containsKey(userId))
+            return userMap.get(userId).getPosition();
         Users users = usersDao.find(userId);
         return users.getPosition();
     }
@@ -120,7 +132,11 @@ public class UsersService {
         users.setId(userId);
         users.setPosition(position);
         int update = usersDao.update(users);
-        if (update == 1) return users;
+        if (update == 1) {
+            if (userMap.containsKey(userId))
+                userMap.remove(userId);
+            return users;
+        }
         logger.error("failed to update position for userId={},position={}", userId, position);
         return null;
     }
@@ -130,7 +146,11 @@ public class UsersService {
         users.setId(userId);
         users.setPassword(password);
         int update = usersDao.update(users);
-        if (update == 1) return users;
+        if (update == 1) {
+            if (userMap.containsKey(userId))
+                userMap.remove(userId);
+            return users;
+        }
         return null;
     }
 
@@ -151,4 +171,17 @@ public class UsersService {
         }
     }
 
+    public static void main(String[] args) {
+        Map<Integer, String> map = new LRUMap(5);
+        map.put(1, "1");
+        map.put(2, "2");
+        map.put(3, "3");
+        map.put(4, "4");
+        map.put(5, "5");
+        if (map.containsKey(1))
+            map.remove(1);
+        System.out.println(map);
+
+
+    }
 }
