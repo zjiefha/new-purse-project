@@ -205,7 +205,7 @@ public class OrderController {
         Order order1 = orderService.getOrder(orderId);
         if (CheckParamUtils.checkParamsNull(order1))
             return MapResultUtils.getErrorResultMap(ErrorMessage.ERROR_ORDER_NULL);
-        if (order1.getType() != Constant.TYPE_FINISHED || order1.getSponsorId() != sponsorId)
+        if (order1.getType() == Constant.TYPE_FINISHED || order1.getSponsorId() != sponsorId)
             return MapResultUtils.getErrorResultMap(ErrorMessage.ERROR_ORDER_CONT_COMMENT);
 
         Order order = orderService.finishedOrder(orderId);
