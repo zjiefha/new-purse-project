@@ -25,5 +25,7 @@ public class Constant {
     public static final int USER_SPONSOR = 1;
     public static final int USER_RECIPIENT = 2;
 
+    public static final int PAGESIZE = 10;
+    public static final int INDEX = 1;
 
 }

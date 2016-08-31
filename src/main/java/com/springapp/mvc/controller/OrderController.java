@@ -229,8 +229,19 @@ public class OrderController {
     public
     @ResponseBody
     Map getOrderByUserId(HttpServletRequest httpServletRequest,
-                         @RequestParam(value = "userType", required = false) Integer userType) {
+                         @RequestParam(value = "userType", required = false) Integer userType,
+                         @RequestParam(value = "pageSize", required = false) Integer pageSize,
+                         @RequestParam(value = "index", required = false) Integer index) {
         userType = (userType == null || userType < 0 || userType > 2) ? Constant.USER_SPONSOR : userType;
+        pageSize = pageSize == null ? Constant.PAGESIZE : pageSize;
+        index = index == null ? Constant.INDEX : index;
+        int start = 0;
+        if (index < 1) {
+            pageSize = 1000;
+        } else {
+            start = pageSize * (index - 1);
+        }
+
 
         Object id = httpServletRequest.getAttribute("userId");
         if (!CheckParamUtils.isLogin(id))
@@ -244,12 +255,12 @@ public class OrderController {
             return MapResultUtils.getErrorResultMap(ErrorMessage.ERROR_USER_INFO);
         }
         if (userType == 1 || userType == 0) {
-            List<Order> orderByUserId = orderService.getOrderBySponsorId(userId);
+            List<Order> orderByUserId = orderService.getOrderBySponsorId(userId,start,pageSize);
             usersService.fillUserInfoByOrder(orderByUserId);
             jsonObject.put("sponsorOrder", orderByUserId);
         }
         if (userType == 2 || userType == 0) {
-            List<Order> orderByRecipientId = orderService.getOrderByRecipientId(userId);
+            List<Order> orderByRecipientId = orderService.getOrderByRecipientId(userId,start,pageSize);
             usersService.fillUserInfoByOrder(orderByRecipientId);
             jsonObject.put("recipientOrder", orderByRecipientId);
         }

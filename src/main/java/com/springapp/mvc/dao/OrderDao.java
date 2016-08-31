@@ -17,9 +17,13 @@ public interface OrderDao {
 
     public Order find(@Param("id") int id);
 
-    public List<Order> findBySponsorId(@Param("sponsorId") int sponsorId);
+    public List<Order> findBySponsorId(@Param("sponsorId") int sponsorId,
+                                       @Param("start") int start,
+                                       @Param("pageSize") int pageSize);
 
-    public List<Order> findByRecipientId(@Param("recipientId") int recipientId);
+    public List<Order> findByRecipientId(@Param("recipientId") int recipientId,
+                                         @Param("start") int start,
+                                         @Param("pageSize") int pageSize);
 
     public int update(Order order);
 

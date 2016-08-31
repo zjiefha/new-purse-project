@@ -28,14 +28,14 @@ public class OrderService {
         return order;
     }
 
-    public List<Order> getOrderBySponsorId(int userId) {
-        List<Order> bySponsorId = orderDao.findBySponsorId(userId);
+    public List<Order> getOrderBySponsorId(int userId, int start, int pageSize) {
+        List<Order> bySponsorId = orderDao.findBySponsorId(userId,start,pageSize);
         if (CheckParamUtils.checkParamsNull(bySponsorId)) return null;
         return bySponsorId;
     }
 
-    public List<Order> getOrderByRecipientId(int userId) {
-        List<Order> bySponsorId = orderDao.findByRecipientId(userId);
+    public List<Order> getOrderByRecipientId(int userId, int start, int pageSize) {
+        List<Order> bySponsorId = orderDao.findByRecipientId(userId,start,pageSize);
         if (CheckParamUtils.checkParamsNull(bySponsorId)) return null;
         return bySponsorId;
     }
